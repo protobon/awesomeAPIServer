@@ -1,0 +1,54 @@
+version: '3.9'
+services:
+  app:
+    container_name: awesome_api
+    stop_signal: SIGINT
+    stop_grace_period: 10s
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+      - DATABASE_PORT=${DB_PORT}
+      - APPLICATION_PORT=${APP_PORT}
+    tty: true
+    build: .
+    expose:
+      - "8000"
+    ports:
+      - 8000:8000
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - awesome_api_db
+    networks:
+      - awesome_api_network_prod
+
+  awesome_api_db:
+    image: postgres:latest
+    container_name: awesome_api_db
+    stop_signal: SIGINT
+    stop_grace_period: 10s
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - '1234:5432'
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - awesome_api_network_prod
+
+volumes:
+  data:
+  app:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  awesome_api_network_prod:
+    driver: bridge
