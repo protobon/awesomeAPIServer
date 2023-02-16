@@ -1,17 +1,17 @@
 # Awesome API Server
 
 ## Build Project
-</br>
+
 
 ```console
 $ make build
 $ make build stage=local
 ```
 Production: 'make build stage=prod'
-#
+</br>
+</br>
 
 ## Run Project
-</br>
 
 ### Local
 ```console
@@ -28,7 +28,8 @@ $ make up
 $ make dup
 ```
 Production: 'make dup stage=prod'
-#
+</br>
+</br>
 
 ## Docker Logs (view)
 ```console
