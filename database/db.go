@@ -1,14 +1,17 @@
 package database
 
 import (
-	"database/sql"
+	"awesomeapiserver/model"
 	"fmt"
 	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	_ "github.com/lib/pq"
 )
 
-var DB *sql.DB
+var DB *gorm.DB
 
 func DBInit(user string, password string,
 	dbhost string, dbname string) {
@@ -22,16 +25,10 @@ func DBInit(user string, password string,
 	fmt.Println(connectionString)
 
 	var err error
-	DB, err = sql.Open("postgres", connectionString)
+	DB, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	CreateTableDummy(DB)
-}
-
-func CreateTableDummy(db *sql.DB) {
-	if _, err := db.Exec(DummyTableCreate); err != nil {
-		log.Fatal(err)
-	}
+	DB.AutoMigrate(&model.Dummy{})
 }

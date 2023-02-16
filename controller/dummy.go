@@ -4,12 +4,12 @@ import (
 	"awesomeapiserver/database"
 	"awesomeapiserver/httputil"
 	"awesomeapiserver/model"
-	"database/sql"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // NewDummy godoc
@@ -90,7 +90,7 @@ func (c *Controller) GetDummy(ctx *gin.Context) {
 	dummy := model.Dummy{ID: id}
 	if err = dummy.QGetDummy(database.DB); err != nil {
 		switch err {
-		case sql.ErrNoRows:
+		case gorm.ErrRecordNotFound:
 			httputil.NewError(ctx, http.StatusNotFound, err)
 		default:
 			httputil.NewError(ctx, http.StatusInternalServerError, err)
