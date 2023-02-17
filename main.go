@@ -87,6 +87,7 @@ func main() {
 			dummy.POST("/new", c.NewDummy)
 			dummy.GET("/dummies", c.Dummies)
 			dummy.GET(":id", c.GetDummy)
+			dummy.PUT("/update", c.UpdateDummy)
 		}
 	}
 
