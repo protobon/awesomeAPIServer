@@ -24,58 +24,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/auth": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get admin info",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "Auth admin",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Admin"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
-                        }
-                    }
-                }
-            }
-        },
         "/dummy/dummies": {
             "get": {
                 "description": "Select all Dummies",
@@ -149,6 +97,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/dummy/update": {
+            "put": {
+                "description": "Updates a dummy in database (id req)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dummy"
+                ],
+                "summary": "Updates Dummy",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Dummy"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/dummy/{id}": {
             "get": {
                 "description": "Get one Dummy from ID",
@@ -199,22 +188,9 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 400
                 },
-                "message": {
+                "error": {
                     "type": "string",
-                    "example": "status bad request"
-                }
-            }
-        },
-        "model.Admin": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "example": 1
-                },
-                "name": {
-                    "type": "string",
-                    "example": "admin name"
+                    "example": "Invalid request payload"
                 }
             }
         },
@@ -222,6 +198,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "description": "gorm.Model",
                     "type": "integer",
                     "example": 1
                 },

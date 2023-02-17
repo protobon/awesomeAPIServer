@@ -5,22 +5,14 @@ definitions:
       code:
         example: 400
         type: integer
-      message:
-        example: status bad request
-        type: string
-    type: object
-  model.Admin:
-    properties:
-      id:
-        example: 1
-        type: integer
-      name:
-        example: admin name
+      error:
+        example: Invalid request payload
         type: string
     type: object
   model.Dummy:
     properties:
       id:
+        description: gorm.Model
         example: 1
         type: integer
       name:
@@ -44,39 +36,6 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /admin/auth:
-    post:
-      consumes:
-      - application/json
-      description: get admin info
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Admin'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/httputil.HTTPError'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/httputil.HTTPError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/httputil.HTTPError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/httputil.HTTPError'
-      security:
-      - ApiKeyAuth: []
-      summary: Auth admin
-      tags:
-      - admin
   /dummy/{id}:
     get:
       consumes:
@@ -150,6 +109,33 @@ paths:
           schema:
             $ref: '#/definitions/httputil.HTTPError'
       summary: Insert Dummy
+      tags:
+      - dummy
+  /dummy/update:
+    put:
+      consumes:
+      - application/json
+      description: Updates a dummy in database (id req)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Dummy'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Updates Dummy
       tags:
       - dummy
 securityDefinitions:

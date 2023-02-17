@@ -1,17 +1,14 @@
 package main
 
 import (
-	"errors"
-	"net/http"
 	"os"
 
 	"awesomeapiserver/controller"
 	"awesomeapiserver/database"
 	_ "awesomeapiserver/docs"
-	"awesomeapiserver/httputil"
 
 	"github.com/gin-gonic/gin"
-
+	log "github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -60,6 +57,12 @@ import (
 //	@scope.admin							Grants read and write access to administrative information
 
 func main() {
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+		ForceColors:     true,
+	})
+
 	var user string
 	var password string
 	var dbhost string
@@ -79,16 +82,12 @@ func main() {
 
 	v1 := r.Group("/api/v1")
 	{
-		admin := v1.Group("/admin")
-		{
-			admin.Use(auth())
-			admin.POST("/auth", c.Auth)
-		}
 		dummy := v1.Group("/dummy")
 		{
 			dummy.POST("/new", c.NewDummy)
 			dummy.GET("/dummies", c.Dummies)
 			dummy.GET(":id", c.GetDummy)
+			dummy.PUT("/update", c.UpdateDummy)
 		}
 	}
 
@@ -96,12 +95,12 @@ func main() {
 	r.Run(port)
 }
 
-func auth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if len(c.GetHeader("Authorization")) == 0 {
-			httputil.NewError(c, http.StatusUnauthorized, errors.New("authorization is required header"))
-			c.Abort()
-		}
-		c.Next()
-	}
-}
+// func auth() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		if len(c.GetHeader("Authorization")) == 0 {
+// 			httputil.NewError(c, http.StatusUnauthorized, errors.New("authorization is required header"))
+// 			c.Abort()
+// 		}
+// 		c.Next()
+// 	}
+// }

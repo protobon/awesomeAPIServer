@@ -3,7 +3,8 @@ package database
 import (
 	"awesomeapiserver/model"
 	"fmt"
-	"log"
+
+	log "github.com/sirupsen/logrus"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -24,6 +25,8 @@ func DBInit(user string, password string,
 
 	fmt.Println(connectionString)
 
+	log.Info("Connecting to database...")
+
 	var err error
 	DB, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
@@ -31,4 +34,6 @@ func DBInit(user string, password string,
 	}
 
 	DB.AutoMigrate(&model.Dummy{})
+
+	log.Info("Database connected")
 }
