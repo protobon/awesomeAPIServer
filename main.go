@@ -1,14 +1,11 @@
 package main
 
 import (
-	"errors"
-	"net/http"
 	"os"
 
 	"awesomeapiserver/controller"
 	"awesomeapiserver/database"
 	_ "awesomeapiserver/docs"
-	"awesomeapiserver/httputil"
 
 	"github.com/gin-gonic/gin"
 
@@ -79,11 +76,6 @@ func main() {
 
 	v1 := r.Group("/api/v1")
 	{
-		admin := v1.Group("/admin")
-		{
-			admin.Use(auth())
-			admin.POST("/auth", c.Auth)
-		}
 		dummy := v1.Group("/dummy")
 		{
 			dummy.POST("/new", c.NewDummy)
@@ -96,12 +88,12 @@ func main() {
 	r.Run(port)
 }
 
-func auth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if len(c.GetHeader("Authorization")) == 0 {
-			httputil.NewError(c, http.StatusUnauthorized, errors.New("authorization is required header"))
-			c.Abort()
-		}
-		c.Next()
-	}
-}
+// func auth() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		if len(c.GetHeader("Authorization")) == 0 {
+// 			httputil.NewError(c, http.StatusUnauthorized, errors.New("authorization is required header"))
+// 			c.Abort()
+// 		}
+// 		c.Next()
+// 	}
+// }
