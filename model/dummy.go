@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 
+	"gopkg.in/validator.v2"
 	"gorm.io/gorm"
 )
 
@@ -10,8 +11,8 @@ import (
 type Dummy struct {
 	gorm.Model
 	ID        int       `gorm:"primaryKey" example:"1"`
-	Name      string    `example:"desktop chair"`
-	Price     float64   `example:"299.99"`
+	Name      *string   `example:"desktop chair" validate:"nonzero"`
+	Price     float64   `example:"299.99" validate:"nonzero"`
 	CreatedAt time.Time `swaggerignore:"true"`
 	UpdatedAt time.Time `swaggerignore:"true"`
 	DeletedAt time.Time `gorm:"-;default:null" swaggerignore:"true"`
@@ -22,9 +23,13 @@ func (Dummy) TableName() string {
 }
 
 func (d *Dummy) QCreateDummy(db *gorm.DB) error {
+	var err error
+	if err = validator.Validate(d); err != nil {
+		return err
+	}
 	d.CreatedAt = time.Now()
 	d.UpdatedAt = d.CreatedAt
-	err := db.Create(d).Error
+	err = db.Create(d).Error
 	return err
 }
 
