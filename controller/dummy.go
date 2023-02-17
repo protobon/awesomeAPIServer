@@ -4,9 +4,10 @@ import (
 	"awesomeapiserver/database"
 	"awesomeapiserver/httputil"
 	"awesomeapiserver/model"
-	"log"
 	"net/http"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

@@ -8,7 +8,7 @@ import (
 	_ "awesomeapiserver/docs"
 
 	"github.com/gin-gonic/gin"
-
+	log "github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -57,6 +57,12 @@ import (
 //	@scope.admin							Grants read and write access to administrative information
 
 func main() {
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+		ForceColors:     true,
+	})
+
 	var user string
 	var password string
 	var dbhost string
