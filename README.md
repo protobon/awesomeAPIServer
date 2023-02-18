@@ -1,4 +1,7 @@
 # Awesome API Server
+## Next:
+1. GORM Relations
+2. Tests
 
 ## Build Project
 
