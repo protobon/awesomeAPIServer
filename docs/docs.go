@@ -37,6 +37,24 @@ const docTemplate = `{
                     "dummy"
                 ],
                 "summary": "Select all Dummies",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "start example",
+                        "name": "start",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "example": 10,
+                        "description": "count example",
+                        "name": "count",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -63,6 +81,17 @@ const docTemplate = `{
                     "dummy"
                 ],
                 "summary": "Insert Dummy",
+                "parameters": [
+                    {
+                        "description": "Dummy example",
+                        "name": "example",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Dummy"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -73,25 +102,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError400"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError404"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError500"
                         }
                     }
                 }
@@ -110,6 +133,17 @@ const docTemplate = `{
                     "dummy"
                 ],
                 "summary": "Updates Dummy",
+                "parameters": [
+                    {
+                        "description": "Dummy example",
+                        "name": "example",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Dummy"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -120,19 +154,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError400"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError404"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError500"
                         }
                     }
                 }
@@ -151,6 +185,15 @@ const docTemplate = `{
                     "dummy"
                 ],
                 "summary": "Select Dummy",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "example: 1",
+                        "name": "int",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -161,19 +204,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError400"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError404"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/httputil.HTTPError"
+                            "$ref": "#/definitions/httputil.HTTPError500"
                         }
                     }
                 }
@@ -181,7 +224,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "httputil.HTTPError": {
+        "httputil.HTTPError400": {
             "type": "object",
             "properties": {
                 "code": {
@@ -190,7 +233,33 @@ const docTemplate = `{
                 },
                 "error": {
                     "type": "string",
-                    "example": "Invalid request payload"
+                    "example": "Invalid request body or query parameters"
+                }
+            }
+        },
+        "httputil.HTTPError404": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 404
+                },
+                "error": {
+                    "type": "string",
+                    "example": "Page not found"
+                }
+            }
+        },
+        "httputil.HTTPError500": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 500
+                },
+                "error": {
+                    "type": "string",
+                    "example": "Internal Server Error"
                 }
             }
         },
@@ -198,7 +267,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "description": "gorm.Model",
                     "type": "integer",
                     "example": 1
                 },

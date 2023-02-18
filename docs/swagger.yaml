@@ -1,18 +1,35 @@
 basePath: /api/v1
 definitions:
-  httputil.HTTPError:
+  httputil.HTTPError400:
     properties:
       code:
         example: 400
         type: integer
       error:
-        example: Invalid request payload
+        example: Invalid request body or query parameters
+        type: string
+    type: object
+  httputil.HTTPError404:
+    properties:
+      code:
+        example: 404
+        type: integer
+      error:
+        example: Page not found
+        type: string
+    type: object
+  httputil.HTTPError500:
+    properties:
+      code:
+        example: 500
+        type: integer
+      error:
+        example: Internal Server Error
         type: string
     type: object
   model.Dummy:
     properties:
       id:
-        description: gorm.Model
         example: 1
         type: integer
       name:
@@ -41,6 +58,12 @@ paths:
       consumes:
       - application/json
       description: Get one Dummy from ID
+      parameters:
+      - description: 'example: 1'
+        in: query
+        name: int
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -51,15 +74,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError400'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError404'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError500'
       summary: Select Dummy
       tags:
       - dummy
@@ -68,6 +91,19 @@ paths:
       consumes:
       - application/json
       description: Select all Dummies
+      parameters:
+      - description: start example
+        example: 0
+        in: query
+        name: start
+        required: true
+        type: integer
+      - description: count example
+        example: 10
+        in: query
+        name: count
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -85,6 +121,13 @@ paths:
       consumes:
       - application/json
       description: save dummy in database
+      parameters:
+      - description: Dummy example
+        in: body
+        name: example
+        required: true
+        schema:
+          $ref: '#/definitions/model.Dummy'
       produces:
       - application/json
       responses:
@@ -95,19 +138,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError400'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError404'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError500'
       summary: Insert Dummy
       tags:
       - dummy
@@ -116,6 +155,13 @@ paths:
       consumes:
       - application/json
       description: Updates a dummy in database (id req)
+      parameters:
+      - description: Dummy example
+        in: body
+        name: example
+        required: true
+        schema:
+          $ref: '#/definitions/model.Dummy'
       produces:
       - application/json
       responses:
@@ -126,15 +172,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError400'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError404'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/httputil.HTTPError'
+            $ref: '#/definitions/httputil.HTTPError500'
       summary: Updates Dummy
       tags:
       - dummy
